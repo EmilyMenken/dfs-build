@@ -1,6 +1,8 @@
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
@@ -133,8 +135,49 @@ public class Build {
    * @return true if the destination is reachable from the start, false otherwise
    */
   public static boolean canReach(Airport start, Airport destination) {
-    return false;
-  }
+
+    boolean flag = false;
+
+    if (start == null || destination == null) return flag;
+
+    if (start == destination) {
+
+      flag = true;
+      return flag;
+
+    }//end if
+
+    Set<Airport> visited = new HashSet<>();
+    Queue<Airport> reachedQueue = new LinkedList<>();
+
+    reachedQueue.add(start);
+
+    while (!reachedQueue.isEmpty()) {
+      Airport current = reachedQueue.poll();
+
+      if (visited.contains(current)) continue;
+
+      visited.add(current);
+
+      if (current == destination) {
+
+        flag = true;
+        return flag;
+
+      }//end if
+
+      for (Airport next : current.getOutboundFlights()) {
+        if (!visited.contains(next)) {
+
+          reachedQueue.add(next);
+
+        }//end if
+      }//end for
+    }//end while
+
+    return flag;
+
+  }//end canReach
 
   /**
    * Returns the set of all values in the graph that cannot be reached from the given starting value.
