@@ -1,11 +1,4 @@
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-import java.util.Stack;
-
+import java.util.*;
 
 public class Build {
 
@@ -189,6 +182,37 @@ public class Build {
    * @return a set of values that cannot be reached from the starting value
    */
   public static <T> Set<T> unreachable(Map<T, List<T>> graph, T starting) {
-    return new HashSet<>();
-  }
-}
+
+  Set<T> visited = new HashSet<>();
+  Stack<T> unreachableStack = new Stack<>();
+
+  unreachableStack.push(starting);
+
+  while (!unreachableStack.isEmpty()) {
+    T current = unreachableStack.pop();
+    if (visited.contains(current)) continue;
+    visited.add(current);
+
+    List<T> neighbors = graph.get(current);
+
+    if (neighbors != null) {
+      for (T neighbor : neighbors) {
+        if (!visited.contains(neighbor)) {
+
+          unreachableStack.push(neighbor);
+
+        }//end if visited doesn't contain neighbor
+      }//end for
+    }//end if not null
+  }//end while
+
+  Set<T> unreachableSet = new HashSet<>(graph.keySet());
+  unreachableSet.removeAll(visited);
+  return unreachableSet;
+
+  }//end unreachable
+
+
+
+
+}//end file
