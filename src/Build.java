@@ -56,16 +56,16 @@ public class Build {
     if (vertex == null) return "";
 
     Set<Vertex<String>> visited = new HashSet<>();
-    Stack<Vertex<String>> stack = new Stack<>();
-    stack.push(vertex);
+    Stack<Vertex<String>> longestStack = new Stack<>();
+    longestStack.push(vertex);
 
     String longest = "";
 
-    while (!stack.isEmpty()) {
-      Vertex<String> current = stack.pop();
+    while (!longestStack.isEmpty()) {
+      Vertex<String> current = longestStack.pop();
 
       if (visited.contains(current)) continue;
-      
+
       visited.add(current);
 
       if (current.data !=null && current.data.length() > longest.length()) {
@@ -77,14 +77,14 @@ public class Build {
       for (Vertex<String> neighbor : current.neighbors) {
         if (!visited.contains(neighbor)) {
 
-          stack.push(neighbor);
+          longestStack.push(neighbor);
 
         }//end if
       }//end for
     }//end while
 
     return longest;
-  }//end longestWord
+}//end longestWord
 
   /**
    * Prints the values of all vertices that are reachable from the given vertex and 
@@ -94,7 +94,35 @@ public class Build {
    * @param <T> the type of values stored in the vertices
    */
   public static <T> void printSelfLoopers(Vertex<T> vertex) {
-  }
+    if (vertex == null) return;
+
+    Set<Vertex<T>> visited = new HashSet<>();
+    Stack<Vertex<T>> selfStack = new Stack<>();
+
+    selfStack.push(vertex);
+
+    while (!selfStack.isEmpty()) {
+      Vertex<T> current = selfStack.pop();
+
+      if (visited.contains(current)) continue;
+
+      visited.add(current);
+
+      if (current.neighbors.contains(current)) {
+
+        System.out.println(current.data);
+
+      }//end if
+
+      for (Vertex<T> neighbor : current.neighbors) {
+        if (!visited.contains(neighbor)) {
+
+          selfStack.push(neighbor);
+
+        }//end if
+      }//end for
+    }//end while
+}//end printSelfLoopers
 
   /**
    * Determines whether it is possible to reach the destination airport through a series of flights
